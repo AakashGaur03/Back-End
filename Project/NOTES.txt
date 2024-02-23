@@ -1,0 +1,9 @@
+
+app.get('/twitter',(req,res)=>{
+    res.send('<h1>Twitter</h1>')
+})
+
+
+Middleware is nothing just when we do .get /twitter so to apply some logic in between before sending response res.send('<h1>Twitter</h1>')
+Example to check if user login or not
+Multiple Middleware can be applied
