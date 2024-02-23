@@ -7,3 +7,62 @@ app.get('/twitter',(req,res)=>{
 Middleware is nothing just when we do .get /twitter so to apply some logic in between before sending response res.send('<h1>Twitter</h1>')
 Example to check if user login or not
 Multiple Middleware can be applied
+
+
+
+HTTP
+URL: Uniform Resourse Locator
+URI: Uniform Resourse Identifier
+URN: Uniform Resourse Name
+
+
+HTTP headers is metadata in key value pair in request and response both
+
+
+Categorization 
+
+Request Headers : from Client
+Response Headers :from Server
+Representation Headers : encoding/compression
+Payload Headers : Data
+CORS Headers
+Security Headers
+
+
+Most common Headers
+
+Accept: application/json or text/html
+User-Agent : From where request come
+Authorization : Bearer Token
+Content-Type : Images Pdf etc
+Cookie : 
+Cache-Control : When data expires
+
+
+
+HTTP Methods
+
+GET
+POST
+PUT
+DELETE
+PATCH
+HEAD
+OPTIONS
+TRACE
+
+HTTP Status Code
+
+1XX Information
+2XX Success
+3XX Redirection
+4XX Client Error
+5XX Server Error
+
+100 : Continue                               400 : Bad Request
+102 : Processing                             401 : Unauthorized
+200 : OK                                     402 : Payment Required
+201 : Created                                404 : not Found
+202 : Accepted                               500 : Internal Server Error
+307 : Temporary Redirect                     504 : Gateway Timeout
+308 : Permanent Redirect                                
