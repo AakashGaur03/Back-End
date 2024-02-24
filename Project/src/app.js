@@ -17,4 +17,12 @@ app.use(express.static("public")); // This is used to store some files or folder
 
 app.use(cookieParser());
 
+
+// routes import
+import userRouter from "./routes/user.routes.js";
+
+// routes declaration
+app.use("/api/v1/users",userRouter)
+
+
 export { app };
