@@ -285,7 +285,7 @@ const changeCurrentPassword =asyncHandler(async(req,res)=>{
 const getCurrentUser = asyncHandler(async(req,res)=>{
   return res
   .status(200)
-  .json(200,req.user,"Current User Fetched Successfully")
+  .json(new ApiResponse(200,req.user,"Current User Fetched Successfully"))
 
 })
 
@@ -295,7 +295,7 @@ const updateAccountDetails = asyncHandler(async(req,res)=>{
     throw new ApiError(400,"All Fields are required")
   }
 
-  const user = User.findByIdAndUpdate(
+  const user = await User.findByIdAndUpdate(
     req.user?._id,
     {
       $set:{
@@ -374,8 +374,81 @@ const updateUserCoverImage = asyncHandler(async(req,res)=>{
 
 })
 
+const getUserChannelProfile = asyncHandler(async(req,res)=>{
+  const {username} = req.params
 
-export { registerUser, loginUser, logoutUser,refreshAccessToken,changeCurrentPassword,getCurrentUser,updateAccountDetails,updateUserAvatar,updateUserCoverImage };
+  if(!username?.trim()){
+    throw new ApiError(400,"Username is missing")
+  }
+
+  const channel = await User.aggregate([
+    {
+      $match : {
+        username : username?.toLowerCase()            // It will give one user
+      }
+    },
+    {
+      $lookup:{
+        from:"subscriptions",            // It is Subscription (it will be in plural in data base) from subscription.model.js
+        localField:"_id",
+        foreignField:"channel",
+        as:"subscribers"
+      }
+    },
+    {
+      $lookup:{                          
+        from:"subscriptions",            // It is Subscription (it will be in plural in data base) from subscription.model.js
+        localField:"_id",
+        foreignField:"subscriber",
+        as:"subscribedTo"
+      }
+    },
+    {
+      $addFields:{
+        subscribersCount:{
+          $size : "$subscribers"            //$subscribers is what we made above as:"subscribers" it is a filed now so thats why $ is used
+        },
+        channelSubscribedToCount:{
+          $size : "$subscribedTo"
+        },
+        isSubscribed:{
+          $cond:{
+            if:{$in : [req.user?._id , "$subscribers.subscriber"]},
+            then:true,
+            else:false
+          }
+        }
+      }
+    },
+    {
+      $project:{
+        fullName:1,
+        username:1,
+        subscribersCount:1,
+        channelSubscribedToCount:1,
+        isSubscribed:1,
+        avatar:1,
+        coverImage:1,
+        email:1
+
+      }
+    }
+  ])
+
+  if (!channel?.length) {
+    throw new ApiError(404,"Channel does not Exists")
+  }
+
+  return res
+  .status(200)
+  .json(
+    new ApiResponse(200,channel[0],"User Channel Fetched Successfully")
+  )
+
+})
+
+
+export { registerUser, loginUser, logoutUser,refreshAccessToken,changeCurrentPassword,getCurrentUser,updateAccountDetails,updateUserAvatar,updateUserCoverImage,getUserChannelProfile, };
 
 // NOTE
 //  User is used when communicated with mongoDB
