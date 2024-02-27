@@ -65,6 +65,8 @@ userSchema.pre("save", async function (next) {
 
 // If method exists then overwrite else create a method
 userSchema.methods.isPasswordCorrect = async function (password) {
+  // console.log(password,"pas2s")
+  // console.log(this.password,"paaaaass")
   return await bcrypt.compare(password, this.password);
 };
 

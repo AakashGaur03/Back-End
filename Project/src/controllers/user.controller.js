@@ -4,6 +4,7 @@ import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt  from "jsonwebtoken";
+import mongoose from "mongoose";
 
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
@@ -189,8 +190,8 @@ const logoutUser = asyncHandler(async (req, res) => {
   await User.findByIdAndUpdate(
     req.user._id,
     {
-      $set:{
-        refreshToken:undefined
+      $unset:{
+        refreshToken: 1 // This removes the filed from the document
       }
     },
     {
@@ -262,9 +263,10 @@ const changeCurrentPassword =asyncHandler(async(req,res)=>{
   // if(newPassword !== confPassword){
   //   throw new ApiError("400","New Password and Confirm Password Not Same")
   // }
+
   const { oldPassword , newPassword } = req.body
 
-
+// console.log(req.body,"Requesr")
 
   const user  = await User.findById(req.user?._id)
   const isPasswordCorrect=await user.isPasswordCorrect(oldPassword)
