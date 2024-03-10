@@ -115,6 +115,38 @@ const registerUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, createdUser, "User Registered Successfully"));
 });
 
+const jokes = asyncHandler(async (req, res) => {
+  const jokes = [
+    {
+      id: 1,
+      title: "JOKE1",
+      content: "This is JOKE1",
+    },
+    {
+      id: 2,
+      title: "JOKE2",
+      content: "This is JOKE2",
+    },
+    {
+      id: 3,
+      title: "JOKE3",
+      content: "This is JOKE3",
+    },
+    {
+      id: 4,
+      title: "JOKE4",
+      content: "This is JOKE4",
+    },
+    {
+      id: 5,
+      title: "JOKE5",
+      content: "This is JOKE5",
+    },
+  ];
+
+  res.send(jokes)
+})
+
 const loginUser = asyncHandler(async (req, res) => {
   // req obdy -> data
   // username or email
@@ -505,9 +537,9 @@ const getWatchHistory = asyncHandler(async(req,res)=>{
 })
 
 
+console.log(jokes,"22")
 
-
-export { registerUser, loginUser, logoutUser,refreshAccessToken,changeCurrentPassword,getCurrentUser,updateAccountDetails,updateUserAvatar,updateUserCoverImage,getUserChannelProfile,getWatchHistory };
+export { registerUser, loginUser, logoutUser,refreshAccessToken,changeCurrentPassword,getCurrentUser,updateAccountDetails,updateUserAvatar,updateUserCoverImage,getUserChannelProfile,getWatchHistory ,jokes };
 
 // NOTE
 //  User is used when communicated with mongoDB
